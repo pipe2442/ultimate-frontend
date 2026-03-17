@@ -1,0 +1,24 @@
+{
+  "name": "ultimate-frontend",
+  "version": "0.1.0",
+  "description": "CLI that inspects a browser UI and helps recreate it locally",
+  "type": "module",
+  "bin": {
+    "ultimate-frontend": "./bin/cli.js"
+  },
+  "scripts": {
+    "dev": "node ./bin/cli.js",
+    "start": "node ./bin/cli.js"
+  },
+  "keywords": [
+    "cli",
+    "frontend",
+    "playwright",
+    "mcp"
+  ],
+  "author": "mr_code",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^14.0.3"
+  }
+}

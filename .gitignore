@@ -1,0 +1,32 @@
+# Node modules
+node_modules/
+# Environment files (secreto)
+.env
+.env.local
+.env.*.local
+# Logs
+npm-debug.log*
+yarn-debug.log*
+*.log
+# Build / cache
+dist/
+build/
+.cache/
+.tmp/
+.parcel-cache/
+# Coverage
+coverage/
+.nyc_output/
+# OS files
+.DS_Store
+Thumbs.db
+# Editors / IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+# Package manager / pnp
+.pnp
+.pnp.js
+# Misc
+*.tgz
