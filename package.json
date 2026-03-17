@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "node ./bin/cli.js",
-    "start": "node ./bin/cli.js"
+    "start": "node ./bin/cli.js",
+    "postinstall": "npx playwright install chromium"
   },
   "keywords": [
     "cli",
@@ -19,6 +20,7 @@
   "author": "mr_code",
   "license": "MIT",
   "dependencies": {
-    "commander": "^14.0.3"
+    "commander": "^14.0.3",
+    "playwright": "^1.58.2"
   }
 }

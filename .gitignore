@@ -30,3 +30,5 @@ Thumbs.db
 .pnp.js
 # Misc
 *.tgz
+# Output files
+output/
