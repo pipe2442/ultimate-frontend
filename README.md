@@ -1,3 +1,6 @@
+
+<img width="1380" height="752" alt="ultimate-frontend" src="https://github.com/user-attachments/assets/f8c99521-b4b1-42ac-8b4c-4f0b3d1e65b4" />
+
 # Ultimate Frontend
 
 > Inspect any website and capture its structure - a CLI tool for frontend developers
