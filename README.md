@@ -35,13 +35,12 @@ To avoid bot detection and use your logged-in sessions (Gmail, Lovable, etc.):
 npm run chrome:debug
 ```
 
-The script will automatically close and restart Chrome with debugging enabled.
+**First time:** The script will copy your Chrome profile (~100-500MB, takes 1 minute). This gives you all your saved logins!
 
-**If the script doesn't work,** manually close Chrome (⌘Q) and run:
-
-```bash
-open -a "Google Chrome" --args --remote-debugging-port=9222
-```
+**What it does:**
+- Creates a copy of your Chrome profile at `~/.chrome-with-debugging`
+- Starts Chrome with remote debugging enabled
+- Preserves all your logged-in sessions
 
 **Step 2:** Run the inspect command:
 
@@ -49,7 +48,7 @@ open -a "Google Chrome" --args --remote-debugging-port=9222
 npm run dev inspect
 ```
 
-The tool will automatically connect to your real Chrome browser! 🎉
+The tool will automatically connect to Chrome with your sessions! 🎉
 
 **Benefits:**
 - ✅ No bot detection on Gmail, Lovable, or other protected sites
@@ -154,7 +153,19 @@ If you see this warning, Chrome isn't started with debugging enabled.
 npm run chrome:debug
 ```
 
-This will restart Chrome with remote debugging. Then run `npm run dev inspect` again.
+This will close your current Chrome and start a debugging-enabled version. Then run `npm run dev inspect` again.
+
+### Need to refresh your sessions?
+
+The debugging Chrome uses a copy of your profile from the first time you ran the script. To update:
+
+```bash
+# Delete the debugging profile
+rm -rf ~/.chrome-with-debugging
+
+# Run the script again to copy fresh sessions
+npm run chrome:debug
+```
 
 ### Browser doesn't open
 
@@ -175,16 +186,20 @@ Very rare, but if a site still detects automation:
 1. Make sure you're using `npm run chrome:debug` first
 2. The tool should show "✓ Connected to your real Chrome browser"
 3. If it shows "Launching fresh browser", CDP connection failed
+4. Try refreshing your profile: `rm -rf ~/.chrome-with-debugging && npm run chrome:debug`
 
-### Chrome/Brave/Edge location not found
-
-The script looks for browsers in `/Applications/`. If you installed elsewhere:
+### Manual Chrome start (if script fails)
 
 ```bash
-# Manually start Chrome with debugging
-/path/to/chrome --remote-debugging-port=9222 &
+# Close Chrome completely
+pkill -9 "Google Chrome"
 
-# Then run inspect
+# Start with debugging
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222 \
+  --user-data-dir="$HOME/.chrome-with-debugging" &
+
+# Wait 5 seconds, then run
 npm run dev inspect
 ```
 
