@@ -1,5 +1,6 @@
 
-<img width="1380" height="752" alt="ultimate-frontend" src="https://github.com/user-attachments/assets/f8c99521-b4b1-42ac-8b4c-4f0b3d1e65b4" />
+<img width="1380" height="752" alt="uf" src="https://github.com/user-attachments/assets/34ef9cd2-e0d5-4174-938d-2aa768df79c6" />
+
 
 # Ultimate Frontend
 
