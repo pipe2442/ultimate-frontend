@@ -13,6 +13,7 @@ export async function run() {
     .command("inspect")
     .description("Inspect the current page")
     .option("-u, --url <url>", "URL to open in browser (default: blank page)")
+    .option("--no-cdp", "Launch fresh browser instead of connecting to existing Chrome (bot detection may occur)")
     .action(inspectCommand);
   program
     .command("screenshot")

@@ -6,12 +6,14 @@ Ultimate Frontend is a command-line tool that opens a browser, lets you navigate
 
 ## Features
 
+- **Connect to your real Chrome browser** - No bot detection! Use your logged-in sessions
 - Launch a real browser (powered by Playwright)
 - Navigate to any website or start with a blank page
 - Capture full-page screenshots and HTML source
 - Multiple captures in one session
 - Timestamped output files (never overwrites)
 - Interactive and easy to use
+- **Works with Gmail, Lovable, and other sites that detect automation**
 
 ## Installation
 
@@ -22,6 +24,52 @@ npm install
 The browser binaries (Chromium) will be automatically downloaded during installation.
 
 ## Usage
+
+### Recommended: Use Your Real Browser (No Bot Detection!)
+
+To avoid bot detection and use your logged-in sessions (Gmail, Lovable, etc.):
+
+**Step 1:** Start Chrome with remote debugging:
+
+```bash
+npm run chrome:debug
+```
+
+The script will automatically close and restart Chrome with debugging enabled.
+
+**If the script doesn't work,** manually close Chrome (⌘Q) and run:
+
+```bash
+open -a "Google Chrome" --args --remote-debugging-port=9222
+```
+
+**Step 2:** Run the inspect command:
+
+```bash
+npm run dev inspect
+```
+
+The tool will automatically connect to your real Chrome browser! 🎉
+
+**Benefits:**
+- ✅ No bot detection on Gmail, Lovable, or other protected sites
+- ✅ Use all your logged-in sessions
+- ✅ Keep your extensions and bookmarks
+- ✅ Faster than launching a fresh browser
+
+---
+
+### Alternative: Fresh Browser (May Trigger Bot Detection)
+
+If you don't need logged-in sessions or want a clean browser:
+
+```bash
+npm run dev inspect --no-cdp
+```
+
+This launches a fresh Chromium instance (sites may detect it as a bot).
+
+---
 
 ### Basic Usage
 
@@ -72,21 +120,41 @@ npm run dev inspect [options]
 
 **Options:**
 - `-u, --url <url>` - URL to open (default: blank page)
+- `--no-cdp` - Launch fresh browser instead of connecting to existing Chrome (bot detection may occur)
 
 **Examples:**
 
 ```bash
+# Connect to your real Chrome (recommended)
+npm run chrome:debug    # Terminal 1: Start Chrome with debugging
+npm run dev inspect     # Terminal 2: Connect and capture
+
 # Start with blank page
 npm run dev inspect
 
 # Open a specific URL
 npm run dev inspect --url https://github.com
 
+# Use fresh browser (bot detection may occur)
+npm run dev inspect --no-cdp
+
 # Shorthand
 npm run dev inspect -u https://google.com
 ```
 
 ## Troubleshooting
+
+### "Chrome not running with remote debugging"
+
+If you see this warning, Chrome isn't started with debugging enabled.
+
+**Solution:**
+
+```bash
+npm run chrome:debug
+```
+
+This will restart Chrome with remote debugging. Then run `npm run dev inspect` again.
 
 ### Browser doesn't open
 
@@ -99,6 +167,26 @@ npx playwright install chromium
 ### Permission issues
 
 Make sure you have write permissions in the project directory. Output files are saved to `./output/`.
+
+### Sites still detect bot (even with CDP)
+
+Very rare, but if a site still detects automation:
+
+1. Make sure you're using `npm run chrome:debug` first
+2. The tool should show "✓ Connected to your real Chrome browser"
+3. If it shows "Launching fresh browser", CDP connection failed
+
+### Chrome/Brave/Edge location not found
+
+The script looks for browsers in `/Applications/`. If you installed elsewhere:
+
+```bash
+# Manually start Chrome with debugging
+/path/to/chrome --remote-debugging-port=9222 &
+
+# Then run inspect
+npm run dev inspect
+```
 
 ## Requirements
 

@@ -6,14 +6,14 @@ import {
 } from "../lib/file-writer.js";
 
 export async function inspectCommand(options) {
-  const { url } = options;
+  const { url, cdp } = options;
   const browserManager = new BrowserManager();
 
   try {
     console.log("🌐 Launching browser...\n");
 
-    // Launch browser
-    await browserManager.launch(url);
+    // Launch browser with CDP option
+    await browserManager.launch(url, { useCDP: cdp });
 
     if (!url || url === "about:blank") {
       console.log("✓ Browser opened (blank page)");
@@ -74,6 +74,6 @@ export async function inspectCommand(options) {
   } finally {
     // Cleanup on exit
     await browserManager.close();
-    console.log("\n👋 Browser closed. Goodbye!");
+    console.log("\n👋 Goodbye!");
   }
 }

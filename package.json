@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "node ./bin/cli.js",
     "start": "node ./bin/cli.js",
+    "chrome:debug": "./scripts/start-chrome-debug.sh",
     "postinstall": "npx playwright install chromium"
   },
   "keywords": [
