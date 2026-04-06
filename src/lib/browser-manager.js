@@ -87,18 +87,57 @@ export class BrowserManager {
       throw new Error('Browser not launched. Call launch() first.')
     }
 
+    // For CDP connections, search ALL contexts for the active page
+    if (this.isConnectedViaCDP) {
+      const allPages = this.browser.contexts().flatMap(c => c.pages())
+      const activePage = allPages.find(p => {
+        const u = p.url()
+        return u && u !== '' && u !== 'about:blank' && !u.startsWith('chrome://')
+      })
+      if (activePage) {
+        this.page = activePage
+        this.context = activePage.context()
+      }
+    }
+
     // Get current URL
     const url = this.page.url()
-    
-    // Capture screenshot as buffer
-    const screenshot = await this.page.screenshot({ 
-      fullPage: true,
-      type: 'png'
-    })
-    
+
+    if (!url || url === 'about:blank' || url.startsWith('chrome://')) {
+      throw new Error('No page to capture. Navigate to a website in Chrome first.')
+    }
+
+    let screenshot
+
+    if (this.isConnectedViaCDP) {
+      // fullPage doesn't work on CDP-connected pages.
+      // Use CDP protocol directly on the real page the user is viewing.
+      try {
+        const cdpSession = await this.context.newCDPSession(this.page)
+        const metrics = await cdpSession.send('Page.getLayoutMetrics')
+        // Chrome 90+ uses cssContentSize, older versions use contentSize
+        const size = metrics.cssContentSize || metrics.contentSize
+        if (!size || !size.width || !size.height) {
+          throw new Error('Could not determine page dimensions')
+        }
+        const result = await cdpSession.send('Page.captureScreenshot', {
+          format: 'png',
+          captureBeyondViewport: true,
+          clip: { x: 0, y: 0, width: size.width, height: size.height, scale: 1 }
+        })
+        screenshot = Buffer.from(result.data, 'base64')
+        await cdpSession.detach()
+      } catch (cdpError) {
+        console.log('⚠️  Full-page CDP capture failed, capturing viewport only:', cdpError.message)
+        screenshot = await this.page.screenshot({ type: 'png' })
+      }
+    } else {
+      screenshot = await this.page.screenshot({ fullPage: true, type: 'png' })
+    }
+
     // Get HTML content
     const html = await this.page.content()
-    
+
     return {
       url,
       html,
